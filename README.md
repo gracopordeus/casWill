@@ -8,7 +8,22 @@ Abordaremos as seguintes temáticas:
 "E lá vamos nóooos!"
 
 
-## Tables Definition
+# Cloud in DigitalOcean
+pw: 2Jh#PB4T^-V_VP
+## Ambiente:
+* (Minio)[https://console.services-minio.wxb5m2.easypanel.host/]
+O Minio funciona como um S3, utilizando as mesmas ferramentas de desenvolvimento.
+No caso, para fazer uma migração de projeto, bast fazer alteração nas credenciais.
+user: admin / password: password
+
+* PostgresSQL
+user: postgres
+password: 123456
+database name: services
+url: postgres://postgres:123456@services_data-lake:5432/services
+
+
+## Tables Definition:
 
 ### Table: `core_account`
 | Column Name          | Type       | Description                      |
