@@ -7,7 +7,7 @@ sys.path.append('/home/r42/caseWill')
 from utils.connections import duckdb_postgres_query
 
 
-PATH_BRONZE = os.getenv('MINIO_bronze')
+PATH_BRONZE = os.getenv('MINIO_BRONZE')
 
 query = f"""
     CREATE TABLE IF NOT EXISTS bronze.customer (

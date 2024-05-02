@@ -4,10 +4,6 @@ sys.path.append('/home/r42/caseWill')
 from utils.connections import duckdb_load_postgres
 db = duckdb_load_postgres()
 
-create_schema_raw = """
-    CREATE SCHEMA IF NOT EXISTS raw;
-"""
-
 create_schema_bronze = """
     CREATE SCHEMA IF NOT EXISTS bronze;
 """

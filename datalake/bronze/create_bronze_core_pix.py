@@ -7,7 +7,7 @@ sys.path.append('/home/r42/caseWill')
 from utils.connections import duckdb_postgres_query
 
 
-PATH_RAW = os.getenv('MINIO_RAW')
+PATH_BRONZE = os.getenv('MINIO_BRONZE')
 
 query = f"""
     CREATE TABLE IF NOT EXISTS raw.core_pix (
@@ -22,7 +22,7 @@ query = f"""
     WITH df AS (
         SELECT 
             *
-        FROM read_csv_auto('{PATH_RAW}/core_pix.csv')
+        FROM read_csv_auto('{PATH_BRONZE}/core_pix.csv')
     )
     INSERT INTO raw.core_pix (
         dt_transaction,
