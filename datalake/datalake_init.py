@@ -17,7 +17,6 @@ create_schema_golden = """
 """
 
 create_schemas = [
-    create_schema_raw,
     create_schema_bronze,
     create_schema_silver,
     create_schema_golden

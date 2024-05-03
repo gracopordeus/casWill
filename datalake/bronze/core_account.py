@@ -10,7 +10,7 @@ from utils.connections import duckdb_postgres_query
 PATH_BRONZE = os.getenv('MINIO_BRONZE')
 
 query = f"""
-    CREATE TABLE IF NOT EXISTS raw.core_account (
+    CREATE TABLE IF NOT EXISTS bronze.core_account (
         dt_transaction          DATE        NULL,
         dt_month                INTEGER     NULL,
         surrogate_key           INTEGER     NULL,
@@ -25,7 +25,7 @@ query = f"""
             *
         FROM read_csv_auto('{PATH_BRONZE}/core_account.csv')
     )
-    INSERT INTO raw.core_account (
+    INSERT INTO bronze.core_account (
         dt_transaction,
         dt_month,
         surrogate_key,

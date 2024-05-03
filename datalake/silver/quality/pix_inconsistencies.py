@@ -8,9 +8,8 @@ from datetime import datetime
 from utils.connections import duckdb_postgres_query, postgres_query
 
 
-PATH_SILVER = os.getenv('MINIO_silver')
+PATH_SILVER = os.getenv('MINIO_SILVER')
 FILE_NAME = datetime.now().strftime('%Y-%m-%d')
-
 
 query = f"""
     CREATE TABLE IF NOT EXISTS silver.pix_inconsistencies (
@@ -92,9 +91,9 @@ comments = """
     COMMENT ON COLUMN silver.pix_inconsistencies.customer_name IS 'Nome do cliente';
     COMMENT ON COLUMN silver.pix_inconsistencies.customer_uf IS 'Unidade Federativa do cliente';
     COMMENT ON COLUMN silver.pix_inconsistencies.customer_street IS 'Rua do cliente';
-    COMMENT ON COLUMN silver.pix_inconsistencies.year IS 'Ano da transação';
-    COMMENT ON COLUMN silver.pix_inconsistencies.month IS 'Mês da transação';
-    COMMENT ON COLUMN silver.pix_inconsistencies.day IS 'Dia da transação';
+    COMMENT ON COLUMN silver.pix_inconsistencies.year IS 'Partição de Ano da transação';
+    COMMENT ON COLUMN silver.pix_inconsistencies.month IS 'Partição de Mês da transação';
+    COMMENT ON COLUMN silver.pix_inconsistencies.day IS 'Partição de Dia da transação';
 """
 
 duckdb_postgres_query(query)

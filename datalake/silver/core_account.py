@@ -8,15 +8,16 @@ from datetime import datetime
 from utils.connections import duckdb_postgres_query, postgres_query
 
 
-PATH_SILVER = os.getenv('MINIO_silver')
+PATH_SILVER = os.getenv('MINIO_SILVER')
 FILE_NAME = datetime.now().strftime('%Y-%m-%d')
 
 
 query = f"""
-    CREATE TABLE IF NOT EXISTS silver.core_pix (
+    CREATE TABLE IF NOT EXISTS silver.core_account (
         transaction_id          VARCHAR     PRIMARY KEY,
         transaction_date        DATE        NULL,
         transaction_month       INTEGER     NULL,
+        customer_id             INTEGER     NULL,
         cd_seqlan               INTEGER     NULL,
         transaction_type        VARCHAR     NULL,
         transaction_value       DOUBLE      NULL,
@@ -25,11 +26,12 @@ query = f"""
         day                     INTEGER     NOT NULL
     );
     
-    CREATE OR REPLACE TEMP VIEW temp_view_silver_core_pix AS (
+    CREATE OR REPLACE TEMP VIEW temp_view_silver_core_account AS (
         SELECT
             id_transaction as transaction_id,
             dt_transaction as transaction_date,
             dt_month as transaction_month,
+            surrogate_key as customer_id,
             cd_seqlan as cd_seqlan,
             ds_transaction_type as transaction_type,
             vl_transaction as transaction_value,
@@ -44,16 +46,17 @@ query = f"""
                 EXTRACT(DAY FROM dt_transaction) AS day,
                 COUNT(1) OVER (PARTITION BY id_transaction) AS rn
             FROM
-                bronze.core_pix
+                bronze.core_account
         )
         WHERE
             rn = 1
     );
     
-    INSERT INTO silver.core_pix (
+    INSERT INTO silver.core_account (
         transaction_id,
         transaction_date,
         transaction_month,
+        customer_id,
         cd_seqlan,
         transaction_type,
         transaction_value,
@@ -61,25 +64,26 @@ query = f"""
         month,
         day
     )
-    SELECT * FROM temp_view_silver_core_pix;
+    SELECT * FROM temp_view_silver_core_account;
     
-    COPY (SELECT * FROM silver.core_pix)
-    TO '{PATH_SILVER}/core_pix/{FILE_NAME}.parquet' (
+    COPY (SELECT * FROM silver.core_account)
+    TO '{PATH_SILVER}/core_account/{FILE_NAME}.parquet' (
         FORMAT PARQUET,
         OVERWRITE_OR_IGNORE true
     );
 """
 comments = """
-    COMMENT ON TABLE silver.core_pix IS 'Esta tabela é dedicada ao armazenamento de transações realizadas via PIX, incluindo todos os detalhes relevantes como o valor, tipo, e data da transação. Ela é crucial para o monitoramento e análise das movimentações financeiras específicas do PIX.';
-    COMMENT ON COLUMN silver.core_pix.transaction_id IS 'Identificador único da transação';
-    COMMENT ON COLUMN silver.core_pix.transaction_date IS 'Data de movimentação';
-    COMMENT ON COLUMN silver.core_pix.transaction_month IS 'Mês-ano da movimentação';
-    COMMENT ON COLUMN silver.core_pix.cd_seqlan IS 'Código sequencial de transações';
-    COMMENT ON COLUMN silver.core_pix.transaction_type IS 'Tipo da transação';
-    COMMENT ON COLUMN silver.core_pix.transaction_value IS 'Valor da transação';
-    COMMENT ON COLUMN silver.core_pix.year IS 'Ano extraído da data de movimentação';
-    COMMENT ON COLUMN silver.core_pix.month IS 'Mês extraído da data de movimentação';
-    COMMENT ON COLUMN silver.core_pix.day IS 'Dia extraído da data de movimentação';
+    COMMENT ON TABLE silver.core_account IS 'Esta tabela armazena todas as transações dos clientes, incluindo detalhes como o tipo, valor, e a data da transação. Ela é essencial para o rastreamento de atividades financeiras e análises relacionadas ao comportamento de transação dos clientes.';
+    COMMENT ON COLUMN silver.core_account.transaction_id IS 'Identificador único da transação';
+    COMMENT ON COLUMN silver.core_account.transaction_date IS 'Data de movimentação';
+    COMMENT ON COLUMN silver.core_account.transaction_month IS 'Mês-ano da movimentação';
+    COMMENT ON COLUMN silver.core_account.customer_id IS 'Número da conta do cliente';
+    COMMENT ON COLUMN silver.core_account.cd_seqlan IS 'Código sequencial de transações';
+    COMMENT ON COLUMN silver.core_account.transaction_type IS 'Tipo da transação';
+    COMMENT ON COLUMN silver.core_account.transaction_value IS 'Valor da transação';
+    COMMENT ON COLUMN silver.core_account.year IS 'Partição de Ano extraído da data de movimentação';
+    COMMENT ON COLUMN silver.core_account.month IS 'Partição de Mês extraído da data de movimentação';
+    COMMENT ON COLUMN silver.core_account.day IS 'Partição de Dia extraído da data de movimentação';
 """
 
 duckdb_postgres_query(query)
