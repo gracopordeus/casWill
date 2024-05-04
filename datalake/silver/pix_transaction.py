@@ -13,7 +13,6 @@ FILE_NAME = datetime.now().strftime('%Y-%m-%d')
 
 
 query = f"""
-    DROP TABLE silver.pix_transaction;
     CREATE TABLE IF NOT EXISTS silver.pix_transaction (
         transaction_id          VARCHAR     PRIMARY KEY,
         transaction_date        DATE        NULL,

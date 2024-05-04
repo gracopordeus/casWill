@@ -69,7 +69,7 @@ query = f"""
     );
 """
 comments = """
-    COMMENT ON TABLE silver.pix_inconsistencies IS 'Tabela para armazenar informações da tabela de origem core_pix com id duplicados. Esta tabela ajuda a equipe técnica a identificar e corrigir essas inconsistências caso a caso.';
+    COMMENT ON TABLE silver.core_pix_id_duplicates IS 'Tabela para armazenar informações da tabela de origem core_pix com id duplicados. Esta tabela ajuda a equipe técnica a identificar e corrigir essas inconsistências caso a caso.';
     COMMENT ON COLUMN silver.core_pix_id_duplicates.transaction_id IS 'Identificador único da transação';
     COMMENT ON COLUMN silver.core_pix_id_duplicates.transaction_date IS 'Data de movimentação';
     COMMENT ON COLUMN silver.core_pix_id_duplicates.transaction_month IS 'Mês-ano da movimentação';

@@ -1,19 +1,18 @@
 import sys
 sys.path.append('/home/r42/caseWill')
 
-from utils.connections import duckdb_load_postgres
-db = duckdb_load_postgres()
+from utils.connections import duckdb_postgres_query
 
 create_schema_bronze = """
-    CREATE SCHEMA IF NOT EXISTS bronze;
+    CREATE SCHEMA IF NOT EXISTS postgres.bronze;
 """
 
 create_schema_silver = """
-    CREATE SCHEMA IF NOT EXISTS silver;
+    CREATE SCHEMA IF NOT EXISTS postgres.silver;
 """
 
 create_schema_golden = """
-    CREATE SCHEMA IF NOT EXISTS golden;
+    CREATE SCHEMA IF NOT EXISTS postgres.golden;
 """
 
 create_schemas = [
@@ -23,6 +22,6 @@ create_schemas = [
 ]
 
 for schema in create_schemas:
-    db.sql("USE postgres; "+schema)
+    duckdb_postgres_query(schema)
     
 print("Done!")

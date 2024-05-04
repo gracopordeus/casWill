@@ -78,7 +78,8 @@ def duckdb_load_postgres():
 db = duckdb_load_postgres()
 
 def duckdb_postgres_query(query:str, db=db):
-    return db.sql("USE postgres; "+ query)
+    db.sql("USE postgres; "+ query)
+    return print("Query executed successfully.")
 
 
 # Postgres directly connection

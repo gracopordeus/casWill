@@ -54,7 +54,7 @@ query = f"""
     );
 """
 comments = """
-    COMMENT ON TABLE silver.pix_inconsistencies IS 'Tabela para armazenar informações da tabela de origem customer com id duplicados. Esta tabela ajuda a equipe técnica a identificar e corrigir essas inconsistências caso a caso.';
+    COMMENT ON TABLE silver.customer_id_duplicates IS 'Tabela para armazenar informações da tabela de origem customer com id duplicados. Esta tabela ajuda a equipe técnica a identificar e corrigir essas inconsistências caso a caso.';
     COMMENT ON COLUMN silver.customer_id_duplicates.customer_id IS 'Identificação única do cliente';
     COMMENT ON COLUMN silver.customer_id_duplicates.entry_date IS 'Data de abertura da conta';
     COMMENT ON COLUMN silver.customer_id_duplicates.birth_date IS 'Data de nascimento';

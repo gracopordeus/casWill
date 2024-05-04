@@ -96,5 +96,12 @@ comments = """
     COMMENT ON COLUMN silver.pix_inconsistencies.day IS 'Partição de Dia da transação';
 """
 
-duckdb_postgres_query(query)
-postgres_query(comments)
+try:
+    duckdb_postgres_query(query)
+except:
+    print("Create table error!")
+    
+try:
+    postgres_query(comments)
+except:
+    print("Comments error!")
