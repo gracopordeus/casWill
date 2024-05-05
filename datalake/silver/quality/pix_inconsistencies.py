@@ -37,9 +37,7 @@ query = f"""
             ca.cd_seqlan as cd_seqlan,
             ca.ds_transaction_type as transaction_type,
             ca.vl_transaction as transaction_value,
-            cu.full_name as customer_name,
             cu.uf as customer_uf,
-            cu.street_name as customer_street,
             EXTRACT(YEAR FROM ca.dt_transaction) AS year,
             EXTRACT(MONTH FROM ca.dt_transaction) AS month,
             EXTRACT(DAY FROM ca.dt_transaction) AS day
@@ -49,7 +47,7 @@ query = f"""
             bronze.core_pix cp
         ON
             ca.id_transaction = cp.id_transaction
-        JOIN
+        LEFT JOIN
             bronze.customer cu
         ON
             ca.surrogate_key = cu.surrogate_key
@@ -65,9 +63,7 @@ query = f"""
         cd_seqlan,
         transaction_type,
         transaction_value,
-        customer_name,
         customer_uf,
-        customer_street,
         year,
         month,
         day

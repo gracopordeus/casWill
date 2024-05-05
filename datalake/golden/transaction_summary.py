@@ -52,27 +52,22 @@ query = f"""
         month,
         day;
 
-    COPY (SELECT * FROM golden.all_transaction)
+    COPY (SELECT * FROM golden.transaction_summary)
     TO '{PATH_GOLDEN}/transaction_summary/{FILE_NAME}.parquet' (
         FORMAT PARQUET,
         OVERWRITE_OR_IGNORE true
     );
 """
 comments = """
-    COMMENT ON TABLE golden.all_transaction IS 'Tabela abrangente que junta informações de transações PIX com dados detalhados dos clientes para fornecer um panorama detalhado das atividades financeiras dos clientes relacionadas ao PIX.';
-    COMMENT ON COLUMN golden.all_transaction.transaction_id IS 'Identificador único da transação PIX, combinando informações das tabelas core_pix e core_account.';
-    COMMENT ON COLUMN golden.all_transaction.transaction_date IS 'Data da transação conforme registrada na tabela core_account.';
-    COMMENT ON COLUMN golden.all_transaction.transaction_month IS 'Mês numérico da transação conforme registrada na tabela core_account.';
-    COMMENT ON COLUMN golden.all_transaction.customer_id IS 'Identificador único do cliente associado à transação.';
-    COMMENT ON COLUMN golden.all_transaction.cd_seqlan IS 'Código sequencial do lançamento da transação.';
-    COMMENT ON COLUMN golden.all_transaction.transaction_type IS 'Tipo da transação, especificando se é PIX ou outro tipo.';
-    COMMENT ON COLUMN golden.all_transaction.transaction_value IS 'Valor monetário da transação conforme registrado na tabela core_account.';
-    COMMENT ON COLUMN golden.all_transaction.birth_date IS 'Data de nascimento do cliente.';
-    COMMENT ON COLUMN golden.all_transaction.uf_name IS 'Nome do estado de residência do cliente.';
-    COMMENT ON COLUMN golden.all_transaction.uf IS 'Sigla do estado de residência do cliente.';
-    COMMENT ON COLUMN golden.all_transaction.year IS 'Partição de Ano extraído da data da transação na tabela core_account.';
-    COMMENT ON COLUMN golden.all_transaction.month IS 'Partição de Mês extraído da data da transação na tabela core_account.';
-    COMMENT ON COLUMN golden.all_transaction.day IS 'Partição de Dia extraído da data da transação na tabela core_account.';
+    COMMENT ON TABLE golden.transaction_summary IS 'Tabela de resumo das transações PIX, agrupadas por estado, ano, mês e dia, com métricas de valor total da transação, contagem distinta de transações e contagem distinta de usuários.';
+    COMMENT ON COLUMN golden.transaction_summary.uf_name IS 'Nome do estado de residência do cliente.';
+    COMMENT ON COLUMN golden.transaction_summary.uf IS 'Sigla do estado de residência do cliente.';
+    COMMENT ON COLUMN golden.transaction_summary.year IS 'Partição de Ano da data da transação.';
+    COMMENT ON COLUMN golden.transaction_summary.month IS 'Partição de Mês da data da transação.';
+    COMMENT ON COLUMN golden.transaction_summary.day IS 'Partição de Dia da data da transação.';
+    COMMENT ON COLUMN golden.transaction_summary.total_transaction_value IS 'Valor total das transações PIX agrupadas.';
+    COMMENT ON COLUMN golden.transaction_summary.distinct_transaction_count IS 'Contagem distinta de transações PIX.';
+    COMMENT ON COLUMN golden.transaction_summary.distinct_user_count IS 'Contagem distinta de usuários envolvidos nas transações PIX.';
 """
 
 duckdb_postgres_query(query)

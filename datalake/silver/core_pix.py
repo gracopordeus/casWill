@@ -51,15 +51,7 @@ query = f"""
     );
     
     INSERT INTO silver.core_pix (
-        transaction_id,
-        transaction_date,
-        transaction_month,
-        cd_seqlan,
-        transaction_type,
-        transaction_value,
-        year,
-        month,
-        day
+        *
     )
     SELECT * FROM temp_view_silver_core_pix;
     
